@@ -1,0 +1,110 @@
+/* Startseite */
+
+
+body {
+  margin: 0;
+  font-family: poppins, sans-serif;
+}
+
+/* Header-Styling */
+header {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: #ffffff; /* Weißer Hintergrund */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo img {
+  height: 140px;
+  width: auto;
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  gap: 40px; /* Mehr Abstand zwischen den Links */
+}
+
+nav a {
+  margin-right: 50px;
+  text-decoration: none;      /* Unterstrich entfernt */
+  color: #000000;             /* Schwarze Schrift */
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #007BFF; /* Farbe beim Hover */
+}
+
+/* Warenkorb Icon */
+.cart-icon img {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+}
+
+
+main{
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+}
+
+#einleitungstext{
+  width: 55%;
+}
+
+h1{
+  font-size: 340%;
+}
+
+.hairwise-start-img{
+  width: 55%;
+  height: auto;
+  border-radius: 20px;
+}
+
+
+.shop-button {
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #478787, #bc54bd);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease,  0.3s ease;
+  border: none;
+}
+
+.shop-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #478787, #bc54bd);
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 1rem;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
