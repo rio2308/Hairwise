@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us | Hairwise</title>
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8f4ff 0%, #ede7f6 100%);
+      color: #2d1b4e;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin: 40px 0;
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6a4c93, #8b5a9f, #c39bd3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 8px rgba(106, 76, 147, 0.2);
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #6a4c93, #c39bd3);
+      border-radius: 2px;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      color: #5a4b6b;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .team-photo {
+      max-width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(106, 76, 147, 0.2);
+      margin-bottom: 40px;
+    }
+
+    /* Header-Styling */
+    header {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #6a4c93 0%, #8b5a9f 100%);
+      box-shadow: 0 4px 20px rgba(106, 76, 147, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      opacity: 0.3;
+    }
+
+    /* Logo */
+    .logo img {
+      height: 140px;
+      width: auto;
+      filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.3));
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 10px 20px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: #ffffff;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+      opacity: 0.7;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+    
+    nav a.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    nav a.active::after {
+      transform: scaleX(1);
+      background: #f7dc6f;
+      opacity: 1;
+    }
+
+    /* Warenkorb Icon */
+    .cart-icon img {
+      height: 40px;
+      width: auto;
+      cursor: pointer;
+      filter: brightness(0) invert(1);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    
+    .cart-icon:hover img {
+      transform: scale(1.1);
+      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
+    }
+    
+    /* Global scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6a4c93, #c39bd3);
+      border-radius: 20px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(106, 76, 147, 0.1);
+      border-radius: 20px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a3d7a, #b388c7);
+    }
+    
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #2d1b4e 0%, #4a2c6b 100%);
+      color: #ffffff;
+      margin-top: auto;
+      position: relative;
+      overflow: hidden;
+      padding: 40px 0 20px;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+    
+    .footer-logo img {
+      filter: brightness(0) invert(1);
+      opacity: 0.8;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .footer-links a:hover {
+      color: #f7dc6f;
+      text-decoration: underline;
+    }
+    
+    .footer-copyright {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+        height: auto;
+        flex-wrap: wrap;
+      }
+
+      nav {
+        gap: 10px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+
+      nav a {
+        margin-right: 0;
+        font-size: 16px;
+        padding: 8px 15px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      p {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    
+  </style>
+</head>
+
+<body>    <header>
+        <!-- Logo ganz links -->
+        <div class="logo">
+          <a href="index.html"><img src="logo.png" alt="Hairshop Logo" /></a>
+        </div>
+    
+        <!-- Navigation -->
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="about.html" class="active">About Us</a>
+          <a href="products.html">Produkte</a>
+          <a href="kontakt.html">Kontakt</a>
+          <a href="warenkorb.html">Warenkorb</a>
+        </nav>
+    
+        <!-- Warenkorb Icon ganz rechts -->
+        <div class="cart-icon">
+          <a href="warenkorb.html">
+            <img src="cart-icon.png" alt="Warenkorb" />
+          </a>
+        </div>
+      </header>
+  
+  <div class="container">
+    <h1>About Us</h1>
+
+    <p>
+      Wir sind ein junges und dynamisches Unternehmen, spezialisiert auf hochwertige Haarprodukte. Mit grosser Leidenschaft und Know-how bieten wir innovative Lösungen für gesundes, glänzendes und gepflegtes Haar. Unser Team steht für Qualität, Zuverlässigkeit und exzellenten Kundenservice – wir sind fit, motiviert und immer auf dem neuesten Stand der Trends und Technologien, um Ihnen das Beste zu bieten.
+    </p>
+    
+    <p>
+      Unsere Produkte werden sorgfältig ausgewählt und unterliegen strengen Qualitätskontrollen, um sicherzustellen, dass nur die besten Inhaltsstoffe in Ihre Haare gelangen. Wir legen grossen Wert auf Nachhaltigkeit und Umweltfreundlichkeit, weshalb wir verstärkt auf natürliche Inhaltsstoffe und umweltbewusste Verpackungen setzen.
+    </p>
+    
+    <p>
+      Darüber hinaus verstehen wir, dass jeder Haartyp individuell ist. Deshalb bieten wir massgeschneiderte Beratung und Produkte an, die auf die spezifischen Bedürfnisse unserer Kunden abgestimmt sind. Egal ob trockenes, strapaziertes oder coloriertes Haar – bei uns finden Sie die passende Pflege.
+    </p>
+
+    <img src="teambild.jpg" alt="Unser Team" class="team-photo" />
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="logo.png" alt="Hairwise Logo" width="80" height="80">
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="products.html">Produkte</a>
+        <a href="kontakt.html">Kontakt</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2025 Hairwise – Ihr Experte für hochwertige Haarprodukte
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Produkte | Hairwise</title>
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8f4ff 0%, #ede7f6 100%);
+      color: #2d1b4e;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
+    }    /* Header-Styling */
+    header {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #6a4c93 0%, #8b5a9f 100%);
+      box-shadow: 0 4px 20px rgba(106, 76, 147, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      opacity: 0.3;
+    }
+
+    /* Logo */
+    .logo img {
+      height: 140px;
+      width: auto;
+      filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.3));
+    }    /* Navigation */
+    nav {
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 10px 20px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: #ffffff;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+      opacity: 0.7;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+    
+    nav a.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    nav a.active::after {
+      transform: scaleX(1);
+      background: #f7dc6f;
+      opacity: 1;
+    }
+
+    /* Warenkorb Icon */
+    .cart-icon img {
+      height: 40px;
+      width: auto;
+      cursor: pointer;
+      filter: brightness(0) invert(1);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .cart-icon:hover img {
+      transform: scale(1.1);
+      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
+    }
+
+    /* Haupttitel */
+    h1 {
+      text-align: center;
+      margin: 40px 0;
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6a4c93, #8b5a9f, #c39bd3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 8px rgba(106, 76, 147, 0.2);
+      position: relative;
+    }    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #6a4c93, #c39bd3);
+      border-radius: 2px;
+    }
+      /* Product controls */
+    .product-controls {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+  
+    
+    .view-controls {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .sort-button {
+      background: white;
+      border: 2px solid rgba(106, 76, 147, 0.2);
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s ease;
+      color: #2d1b4e;
+    }
+    
+    .sort-button:hover {
+      border-color: rgba(106, 76, 147, 0.5);
+      background-color: rgba(106, 76, 147, 0.05);
+    }
+    
+    .sort-button.active {
+      background: rgba(106, 76, 147, 0.1);
+      border-color: rgba(106, 76, 147, 0.3);
+    }/* Container mit Grid-Layout für professionellere Darstellung */
+    #productList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 20px 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }    .product-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 32px rgba(106, 76, 147, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      height: 100%;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(106, 76, 147, 0.05) 100%);
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(106, 76, 147, 0.25);
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }    .product-image {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f8f4ff, #ede7f6);
+      transition: transform 0.3s ease;
+      border: 2px solid rgba(106, 76, 147, 0.1);
+      padding: 10px;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 15px 0 8px;
+      color: #2d1b4e;
+      text-shadow: 0 1px 2px rgba(45, 27, 78, 0.1);
+    }    p {
+      font-size: 0.95rem;
+      margin: 8px 0;
+      color: #5a4b6b;
+      line-height: 1.5;
+    }
+    
+    p.price {
+      font-size: 1.2rem;
+      margin-top: 12px;
+      color: #2d1b4e;
+      font-weight: 500;
+    }.product-card button {
+      background: linear-gradient(135deg, #6a4c93 0%, #8b5a9f 50%, #c39bd3 100%);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      margin-top: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(106, 76, 147, 0.2);
+    }
+
+    .product-card button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .product-card button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(106, 76, 147, 0.4);
+      background: linear-gradient(135deg, #5a3d7a 0%, #7a4a8a 50%, #b388c7 100%);
+    }
+
+    .product-card button:hover::before {
+      left: 100%;
+    }
+
+    .product-card button:active {
+      transform: translateY(0);
+    }    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #2d1b4e 0%, #4a2c6b 100%);
+      color: #ffffff;
+      margin-top: auto;
+      position: relative;
+      overflow: hidden;
+      padding: 40px 0 20px;
+      margin-top: 50px;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+    
+    .footer-logo img {
+      filter: brightness(0) invert(1);
+      opacity: 0.8;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .footer-links a:hover {
+      color: #f7dc6f;
+      text-decoration: underline;
+    }
+    
+    .footer-copyright {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }    /* Global scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6a4c93, #c39bd3);
+      border-radius: 20px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(106, 76, 147, 0.1);
+      border-radius: 20px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a3d7a, #b388c7);
+    }
+
+    /* Responsive Design */    @media (max-width: 1100px) {
+      #productList {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+        height: auto;
+        flex-wrap: wrap;
+      }
+
+      nav {
+        gap: 10px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+
+      nav a {
+        margin-right: 0;
+        font-size: 16px;
+        padding: 8px 15px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin: 30px 0;
+      }
+
+      .product-card {
+        padding: 20px;
+      }
+
+      #productList {
+        padding: 15px;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 10px;
+      }
+
+      .logo img {
+        height: 80px;
+      }
+
+      nav {
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        font-size: 14px;
+        padding: 6px 10px;
+        width: calc(50% - 10px);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+      
+      #productList {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animationen für bessere UX */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-card {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .product-card:nth-child(even) {
+      animation-delay: 0.1s;
+    }    .product-card:nth-child(3n) {
+      animation-delay: 0.2s;
+    }
+    
+    /* Loading spinner */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      width: 100%;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(106, 76, 147, 0.2);
+      border-radius: 50%;
+      border-top-color: #6a4c93;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+      .error-message {
+      background-color: rgba(255, 0, 0, 0.1);
+      border-left: 4px solid #ff3b30;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      color: #d32f2f;
+      text-align: center;
+    }
+    
+    /* Cart notification */
+    .cart-notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #6a4c93 0%, #8b5a9f 100%);
+      color: white;
+      padding: 0;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transform: translateY(0);
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      animation: slideIn 0.5s forwards;
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+    }
+    
+    .cart-notification svg {
+      margin-right: 12px;
+      color: #f7dc6f;
+    }
+    
+    .cart-notification.hide {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Logo ganz links -->
+    <div class="logo">
+      <a href="index.html"><img src="logo.png" alt="Hairshop Logo" /></a>
+    </div>    <!-- Navigation -->
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="products.html" class="active">Produkte</a>
+      <a href="kontakt.html">Kontakt</a>
+      <a href="warenkorb.html">Warenkorb</a>
+    </nav>
+
+    <!-- Warenkorb Icon ganz rechts -->
+    <div class="cart-icon">
+      <a href="warenkorb.html">
+        <img src="cart-icon.png" alt="Warenkorb" />
+      </a>
+    </div>
+  </header>  <div class="container">
+    <h1>Unsere Haarprodukte</h1>
+      <div class="product-controls">
+      <div class="view-controls">
+        <button class="sort-button" id="sortPrice">
+          <span>Preis</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div id="productList"></div>
+  </div>
+
+  <script>
+    const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api';    async function loadProducts() {
+      const container = document.getElementById('productList');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Produkte werden geladen...</p></div>';
+      
+      try {
+        const res = await fetch(`${BASE_URL}/collections/products/records`);
+        if (!res.ok) throw new Error('Fehler beim Laden der Produkte');
+
+        const data = await res.json();
+        allProducts = data.items; // Store all products for filtering and sorting
+        displayProducts(data.items);
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = '<div class="error-message"><p>Fehler beim Laden der Produkte.</p></div>';
+      }
+    }
+
+    function displayProducts(products) {
+      const container = document.getElementById('productList');
+      container.innerHTML = '';
+
+      if (products.length === 0) {
+        container.innerHTML = '<p>Keine Produkte gefunden.</p>';
+        return;
+      }
+
+      products.forEach(p => {
+        let imageUrl = 'placeholder.jpg';
+        if (p.image && p.image.length > 0) {
+          const filename = p.image[0];
+          imageUrl = `${BASE_URL}/files/products/${p.id}/${filename}`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'product-card';        card.innerHTML = `
+          <img src="${imageUrl}" alt="${p.name}" class="product-image" />
+          <h3>${p.name}</h3>
+          <p>${p.description || ''}</p>
+          <p class="price"><strong>CHF ${p.price}</strong></p>
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-right: 6px;" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            Zum Warenkorb
+          </button>
+        `;        card.querySelector('button').addEventListener('click', () => {
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          cart.push({ id: p.id, name: p.name, price: p.price });
+          localStorage.setItem('cart', JSON.stringify(cart));
+          
+          // Create custom notification instead of using alert
+          const notification = document.createElement('div');
+          notification.className = 'cart-notification';
+          notification.innerHTML = `
+            <div class="notification-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+              </svg>
+              <span>${p.name} zum Warenkorb hinzugefügt!</span>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          
+          // Auto-remove notification after 3 seconds
+          setTimeout(() => {
+            notification.classList.add('hide');
+            setTimeout(() => notification.remove(), 500);
+          }, 3000);
+        });
+
+        container.appendChild(card);
+      });
+    }    // Sort functionality
+    let allProducts = [];
+    let sortDirection = 'asc';
+    
+    document.getElementById('sortPrice').addEventListener('click', (e) => {
+      const btn = e.currentTarget;
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      btn.classList.toggle('active');
+      
+      const sorted = [...allProducts].sort((a, b) => {
+        return sortDirection === 'asc' ? 
+          parseFloat(a.price) - parseFloat(b.price) : 
+          parseFloat(b.price) - parseFloat(a.price);
+      });
+      
+      displayProducts(sorted);
+    });
+    
+    async function init() {
+      await loadProducts();
+    }
+    
+    init();
+  </script>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="logo.png" alt="Hairwise Logo" width="80" height="80">
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="products.html">Produkte</a>
+        <a href="kontakt.html">Kontakt</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2025 Hairwise – Ihr Experte für hochwertige Haarprodukte
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
