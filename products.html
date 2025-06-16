@@ -53,10 +53,28 @@
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
       opacity: 0.3;
     }
+    .header-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
 
+.admin-icon img {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.admin-icon:hover img {
+  transform: scale(1.1);
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
+}
     /* Logo */
     .logo img {
-      height: 140px;
+      height: 70px;
       width: auto;
       filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.3));
     }    /* Navigation */
@@ -566,15 +584,22 @@
       <a href="about.html">About Us</a>
       <a href="products.html" class="active">Produkte</a>
       <a href="kontakt.html">Kontakt</a>
-      <a href="warenkorb.html">Warenkorb</a>
     </nav>
-
+    
     <!-- Warenkorb Icon ganz rechts -->
-    <div class="cart-icon">
-      <a href="warenkorb.html">
-        <img src="cart-icon.png" alt="Warenkorb" />
-      </a>
+    <div class="header-icons">
+      <div class="cart-icon">
+        <a href="warenkorb.html">
+          <img src="cart-icon.png" alt="Warenkorb" />
+        </a>
+      </div>
+      <div class="admin-icon">
+        <a href="admin.html">
+          <img src="anmelde-icon.png" alt="Admin Login" />
+        </a>
+      </div>
     </div>
+
   </header>  <div class="container">
     <h1>Unsere Haarprodukte</h1>
       <div class="product-controls">

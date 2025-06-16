@@ -61,11 +61,11 @@
 
     /* Logo */
     .logo img {
-      height: 140px;
+      height: 70px;
       width: auto;
       filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.3));
     }
-
+    
     /* Navigation */
     nav {
       display: flex;
@@ -118,21 +118,6 @@
       opacity: 1;
     }
 
-    /* Warenkorb Icon */
-    .cart-icon img {
-      height: 40px;
-      width: auto;
-      cursor: pointer;
-      filter: brightness(0) invert(1);
-      transition: all 0.3s ease;
-      z-index: 2;
-    }
-    
-    .cart-icon:hover img {
-      transform: scale(1.1);
-      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
-    }
-
     main {
       display: flex;
       align-items: center;
@@ -181,7 +166,7 @@
       transform: translateY(-4px);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
       background: linear-gradient(135deg, #987db8, #987db8);
-    }    /* Global scrollbar styling */
+    }   
     ::-webkit-scrollbar {
       width: 12px;
       height: 12px;
@@ -265,6 +250,41 @@
       font-size: 14px;
       color: rgba(255, 255, 255, 0.6);
     }
+ /* Warenkorb Icon */
+ .cart-icon img {
+      height: 40px;
+      width: auto;
+      cursor: pointer;
+      filter: brightness(0) invert(1);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    
+    .cart-icon:hover img {
+      transform: scale(1.1);
+      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
+    }
+
+   
+.header-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.admin-icon img {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.admin-icon:hover img {
+  transform: scale(1.1);
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
+}
   </style>
 </head>
 <body>
@@ -280,15 +300,23 @@
       <a href="about.html">About Us</a>
       <a href="products.html">Produkte</a>
       <a href="kontakt.html">Kontakt</a>
-      <a href="warenkorb.html">Warenkorb</a>
     </nav>
 
-    <!-- Warenkorb Icon ganz rechts -->
-    <div class="cart-icon">
-      <a href="warenkorb.html">
-        <img src="cart-icon.png" alt="Warenkorb" />
-      </a>
-    </div>
+    <!-- header icon -->
+<div class="header-icons">
+  <div class="cart-icon">
+    <a href="warenkorb.html">
+      <img src="cart-icon.png" alt="Warenkorb" />
+    </a>
+  </div>
+
+  <div class="admin-icon">
+    <a href="admin.html">
+      <img src="anmelde-icon.png" alt="Admin Login" />
+    </a>
+  </div>
+</div>
+
   </header>
   <div class="container">
     <main>
