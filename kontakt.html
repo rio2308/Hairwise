@@ -363,67 +363,6 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      header {
-        padding: 15px 20px;
-        height: 120px;
-      }
-
-      nav {
-        gap: 20px;
-      }
-
-      nav a {
-        margin-right: 0;
-        font-size: 16px;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        margin: 30px 0;
-      }
-
-      #contactForm {
-        margin: 0 20px 40px;
-        padding: 30px 25px;
-      }
-
-      input, textarea, button {
-        padding: 12px 16px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header {
-        height: 100px;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .logo img {
-        height: 60px;
-      }
-
-      nav {
-        gap: 15px;
-      }
-
-      nav a {
-        font-size: 14px;
-        padding: 6px 12px;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      #contactForm {
-        margin: 0 15px 30px;
-        padding: 25px 20px;
-      }
-    }
-
     /* Animationen */
     @keyframes fadeInUp {
       from {
@@ -440,14 +379,12 @@
       animation: fadeInUp 0.8s ease forwards;
     }
 
-    /* Input Placeholder Styling */
+    /* Input platzhalter Styling */
     input::placeholder,
     textarea::placeholder {
       color: rgba(45, 27, 78, 0.5);
       font-style: italic;
     }
-
-    /* Focus Ring für Accessibility */
     input:focus,
     textarea:focus,
     button:focus {
@@ -503,17 +440,23 @@
   <script>
     const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api/collections/contact/records';
   
+    // Event-Listener fürs Absende des Kontaktformulars
     document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      // Verhindert das automatische Neuladen der Seite beim Formular-Submit
       e.preventDefault();
   
+      // Holt Werte vom Eingabefeld und entfernt dLeerzeiche die zviel sind
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const message = document.getElementById('message').value.trim();
       const responseMessage = document.getElementById('responseMessage');
   
+       // Setzt die Rückmeldungs-Nachricht und CSS-Klasse zurück
       responseMessage.textContent = '';
       responseMessage.className = '';
   
+      // Überprüft ob alli Pflichtfelder usgfüllt worde sind, wenn nöd denn
+      // wird eine Fehlermeldung angezeigt
       if (!name || !email || !message) {
         responseMessage.textContent = 'Bitte füllen Sie alle Pflichtfelder aus.';
         responseMessage.className = 'error-message';
@@ -521,18 +464,25 @@
       }
   
       try {
+        // Sendet die Formulardaten per POST an die API
         const res = await fetch(BASE_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, message })
         });
   
+        // Prüft ob d Anfrage erfolgreich gsi sind, wenn nöd denn
+        // wird eine Fehlermeldung angezeigt
         if (!res.ok) throw new Error('Fehler beim Senden des Formulars.');
   
+        // Setzt das Formular zrugg wenn d Übertragig erfolgrich gsi ish
         e.target.reset();
   
+        // Zeigt e Erfolgsmeldung an
         responseMessage.textContent = 'Danke für Ihre Nachricht! Wir melden uns bald.';
         responseMessage.className = 'success-message';
+
+        //Fehlermeldung anzeigen 
       } catch (error) {
         console.error(error);
         responseMessage.textContent = 'Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.';

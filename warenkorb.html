@@ -402,44 +402,66 @@
     </div>
     <div id="ordersList"></div>
   </div>
+
   <script>
+
     const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api/collections';
+    // Hole den Warenkorb aus dem Local Storage
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Füge Produkte zum Warenkorb hinzu
     function addToCart(product) {
+      //Prüfen ob schon im warenkorb
       const existing = cart.find(item => item.id === product.id);
       if (existing) {
+        //wenn ja wird mengi erhöt
         existing.menge = (existing.menge || 1) + 1;
       } else {
+        //wenn nöd denn wird produkt mit Menge 1 hinzuegfüegt
         product.menge = 1;
         cart.push(product);
       }
-      saveCart();
-      renderCart();
+      saveCart(); //Warenkorb speichere
+      renderCart(); // Warenkorb Aktualisiere
     }
+
+    // Entferne Produkt aus dem Warenkorb
     function removeFromCart(productId) {
+      // Nur Produkte behalte dere ID nöd mit de zu entfernende übereinstimmt
       cart = cart.filter(item => item.id !== productId);
-      saveCart();
-      renderCart();
+      saveCart(); //Speichere
+      renderCart(); //Aktualisiere
     }
+
+    // Speichere des Warenkorbs im Local Storage
     function saveCart() {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
+
+    //Menge ändern
     function updateQuantity(productId, newMenge) {
       const item = cart.find(i => i.id === productId);
       if (!item) return;
       item.menge = newMenge;
-      saveCart();
-      renderCart();
+      saveCart(); //Speichere
+      renderCart(); //Aktualisiere
     }
+
+    //Warenkorb im HTML anzeige
     function renderCart() {
       const tbody = document.getElementById('cartItems');
       const emptyMessage = document.getElementById('emptyCartMessage');
-      tbody.innerHTML = '';
+
+      tbody.innerHTML = ''; //Leere vorherige Inhalt
+
       if (cart.length === 0) {
+        //Wenn warenkorb leer ist zeige Nachricht
         emptyMessage.style.display = 'block';
       } else {
         emptyMessage.style.display = 'none';
       }
+
+      // Für jedes Produkt im Warenkorb eine Tabellenzeile erstellen
       cart.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -452,42 +474,60 @@
           </td>
           <td><button class="remove-btn" data-id="${item.id}">Entfernen</button></td>
         `;
+
+        // Event Listener für Entfernen Buttons hinzufügen
         tr.querySelector('.remove-btn').addEventListener('click', () => {
           removeFromCart(item.id);
         });
+
+      // +Button
         tr.querySelector('.increase-btn').addEventListener('click', () => {
           updateQuantity(item.id, (item.menge || 1) + 1);
         });
+        // -Button mindestens 1
         tr.querySelector('.decrease-btn').addEventListener('click', () => {
           if ((item.menge || 1) > 1) {
             updateQuantity(item.id, item.menge - 1);
           }
         });
+
+        // Zeile ins Tabellen-Body einfügen
         tbody.appendChild(tr);
       });
+
+      //Die IDs von allen Produkten im Warenkorb werden gesammelt und in ein unsichtbares Eingabefeld geschrieben.
       document.getElementById('productIds').value = cart.map(p => p.id).join(',');
     }
+
+    //Bestellung absenden
     document.getElementById('orderForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      //Kundendaten us em Formularfeld hole
       const customerName = document.getElementById('customerName').value.trim();
       const adress = document.getElementById('adress').value.trim();
       const orderStatus = document.getElementById('orderStatus');
+
+      //Prüft ob Warekorb leer ish
       if (cart.length === 0) {
         orderStatus.textContent = 'Ihr Warenkorb ist leer.';
         orderStatus.style.color = 'red';
         return;
       }
+
+      //Prüft ob Name und Adresse ausgefüllt sind
       if (!customerName || !adress) {
         orderStatus.textContent = 'Bitte Name und Adresse ausfüllen.';
         orderStatus.style.color = 'red';
         return;
       }
 
-      // Array aller Produkt-IDs
+      // Array aller Produkt IDs
       const productIds = cart.map(p => p.id);
-      // Gesamtmenge aller Produkte
+      // Gesamtmenge aller Produkte berechne
       const totalMenge = cart.reduce((sum, p) => sum + (p.menge || 1), 0);
 
+      //Bestelldaten-Objekt erstellen
       const orderData = {
         customerName,
         adress,
@@ -496,63 +536,81 @@
       };
 
       try {
+        // Bestellung an die API senden
         const res = await fetch(`${BASE_URL}/orders/records`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
         });
+
+        // Fehlermeldig
         if (!res.ok) throw new Error('Fehler beim Absenden der Bestellung');
+        //Erfolgsnachricht
         orderStatus.textContent = 'Bestellung erfolgreich abgeschickt. Vielen Dank!';
         orderStatus.style.color = 'green';
+
+        // Warenkorb leeren und aktualisieren
         cart = [];
         saveCart();
         renderCart();
+
+        //Formular zurücksetzen
         e.target.reset();
+
       } catch (err) {
         console.error(err);
         orderStatus.textContent = 'Fehler beim Absenden der Bestellung. Bitte versuchen Sie es später erneut.';
         orderStatus.style.color = 'red';
       }
     });
+
+    //Warenkorb initial anzeigen
     renderCart();
 
+    //Beim Klicken auf Bestellung anzeigen
     document.getElementById('showOrdersBtn').addEventListener('click', async () => {
       const ordersList = document.getElementById('ordersList');
       ordersList.innerHTML = 'Lade Bestellungen...';
     
       try {
-        // Alle Produkte holen und als Map für schnellen Zugriff speichern
+        // Alle Produkte holen von API
         const productsRes = await fetch(`${BASE_URL}/products/records?perPage=100`);
         const productsData = await productsRes.json();
+        //Map für schnellen Zugriff Prdukt ID . Produktname
         const productsMap = {};
         productsData.items.forEach(p => productsMap[p.id] = p.name);
     
-        // Alle Bestellungen holen
+        // Alle Bestellungen holen vo de API
         const res = await fetch(`${BASE_URL}/orders/records?sort=-created`);
         const data = await res.json();
     
+        // Wenn keine Bestellungen vorhanden sind
         if (!data.items.length) {
           ordersList.innerHTML = 'Keine Bestellungen gefunden.';
           return;
         }
     
+        // Bestellungen im HTML anzeigen
         ordersList.innerHTML = data.items.map(order => {
-          // order.products ist ein Array von Objekten: { product: id, menge: n }
           const produktListe = (order.products || []).map(p =>
             `${productsMap[p.product] || p.product} (Menge: ${p.menge})`
           ).join(', ');
+
+          //Bstellblock zrugg geh 
           return `
             <div style="margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:8px;">
               <strong>${order.customerName}</strong> (${order.adress})<br>
               Produkte: ${produktListe}
             </div>
           `;
-        }).join('');
+        }).join(''); //Alli HTML Strings zemmefüege
+
       } catch (err) {
         ordersList.innerHTML = 'Fehler beim Laden der Bestellungen.';
       }
     });
   </script>
+
   <footer>
     <div class="footer-content">
       <div class="footer-logo">

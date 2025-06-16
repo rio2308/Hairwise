@@ -617,41 +617,62 @@
   </div>
 
   <script>
-    const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api';    async function loadProducts() {
+    
+    const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api';    
+    //Ladet die Produkte aus der API 
+    async function loadProducts() {
       const container = document.getElementById('productList');
+      //Ladeanzeige
       container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Produkte werden geladen...</p></div>';
       
       try {
+        //Holt Produktdate per Fetch Request
         const res = await fetch(`${BASE_URL}/collections/products/records`);
         if (!res.ok) throw new Error('Fehler beim Laden der Produkte');
 
+        //Antwort wird in JSON umgwandelt
         const data = await res.json();
-        allProducts = data.items; // Store all products for filtering and sorting
+
+        // SPeicheret alli Produkt i de Variable für späteri Sortierige
+        allProducts = data.items; 
+
+        //Zeigt die Produkte im HTML an
         displayProducts(data.items);
+
       } catch (err) {
+        // Bei Fehler zeigt eine Fehlermeldung an
         console.error(err);
         container.innerHTML = '<div class="error-message"><p>Fehler beim Laden der Produkte.</p></div>';
       }
     }
 
+    //Funktion zur ANzeige der Produkte im HTML
     function displayProducts(products) {
       const container = document.getElementById('productList');
-      container.innerHTML = '';
+      container.innerHTML = ''; // Löscht alti Inhalt
 
+      //Falls keine gfunde werdet
       if (products.length === 0) {
         container.innerHTML = '<p>Keine Produkte gefunden.</p>';
         return;
       }
 
+      //gaht alli Pridukt dure und erstellt e Produktkarte
       products.forEach(p => {
+        //Standart bild wenn keis festgleit wird
         let imageUrl = 'placeholder.jpg';
+        //Wenn bilder vorhande sind
         if (p.image && p.image.length > 0) {
           const filename = p.image[0];
           imageUrl = `${BASE_URL}/files/products/${p.id}/${filename}`;
         }
 
+        // Product 
         const card = document.createElement('div');
-        card.className = 'product-card';        card.innerHTML = `
+        card.className = 'product-card'; 
+
+        //Fügt Inhalt i dProduktkarte i
+        card.innerHTML = `
           <img src="${imageUrl}" alt="${p.name}" class="product-image" />
           <h3>${p.name}</h3>
           <p>${p.description || ''}</p>
@@ -662,12 +683,18 @@
             </svg>
             Zum Warenkorb
           </button>
-        `;        card.querySelector('button').addEventListener('click', () => {
+        `;        
+        
+        //Button zum s Produkt zum Warenkorb hinzuzufüge
+        card.querySelector('button').addEventListener('click', () => {
+          //Holt den aktuellen Warenkorb aus dem LocalStorage 
           let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          //Aktuelles prdukt in warekorb hinzuefüege
           cart.push({ id: p.id, name: p.name, price: p.price });
+          //Speicheret de aktualisierti Warekorb im Local storage
           localStorage.setItem('cart', JSON.stringify(cart));
           
-          // Create custom notification instead of using alert
+          // Erstellt eine Benachrichtigung
           const notification = document.createElement('div');
           notification.className = 'cart-notification';
           notification.innerHTML = `
@@ -678,39 +705,50 @@
               <span>${p.name} zum Warenkorb hinzugefügt!</span>
             </div>
           `;
+
+          //Benachrichtigung hinzufügen dem Body
           document.body.appendChild(notification);
           
-          // Auto-remove notification after 3 seconds
+          // NAchricht entfernen nach 3 sekunden
           setTimeout(() => {
             notification.classList.add('hide');
             setTimeout(() => notification.remove(), 500);
           }, 3000);
         });
 
+        //Pridukkarte zum Container hinzufüge
         container.appendChild(card);
       });
-    }    // Sort functionality
-    let allProducts = [];
-    let sortDirection = 'asc';
+    }    
     
+    // Sortierungsfunktion
+    let allProducts = [];
+    let sortDirection = 'asc'; //Standart aufseigend
+    
+    //Preissortieren button
     document.getElementById('sortPrice').addEventListener('click', (e) => {
       const btn = e.currentTarget;
+      //Sortierung wechselnn
       sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
       btn.classList.toggle('active');
       
+      //Kopieren der Array und Sortieren nach Preis
       const sorted = [...allProducts].sort((a, b) => {
         return sortDirection === 'asc' ? 
           parseFloat(a.price) - parseFloat(b.price) : 
           parseFloat(b.price) - parseFloat(a.price);
       });
       
+      //Zeigt die sortierten Produkte an
       displayProducts(sorted);
     });
     
+    //Initialisierungsfunktion = LAdet die Produkte bim Start
     async function init() {
       await loadProducts();
     }
     
+    //Start der Initialisierungsfunktion
     init();
   </script>
   <footer>

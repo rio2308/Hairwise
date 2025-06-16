@@ -26,7 +26,6 @@
       line-height: 1.6;
     }
 
-    /* Scrollbar styling from index */
     ::-webkit-scrollbar {
       width: 12px;
       height: 12px;
@@ -48,7 +47,7 @@
       background: linear-gradient(135deg, #5a3d7a, #b388c7);
     }
 
-    /* Header icons gleich index */
+    /* Header icons gliich wie bim index */
     .header-icons {
       display: flex;
       gap: 15px;
@@ -69,7 +68,6 @@
       filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(247, 220, 111, 0.8));
     }
 
-    /* Update container styling */
     .container {
       max-width: 1200px;
       width: 100%;
@@ -80,7 +78,7 @@
       box-shadow: 0 8px 32px rgba(106,76,147,0.13);
     }
 
-    /* Header matching index */
+    /* Header */
     header {
       height: 120px;
       display: flex;
@@ -96,7 +94,7 @@
       margin-bottom: 20px;
     }
 
-    /* Update navigation styles to match index */
+    /* Update navigation gliich wie bim index */
     nav {
       display: flex;
       gap: 20px;
@@ -132,7 +130,7 @@
       transform: scaleX(1);
     }
 
-    /* Update button styles */
+    /* Update button */
     #loadOrdersBtn, .logout-btn {
       display: inline-block;
       padding: 14px 32px;
@@ -154,8 +152,6 @@
       background: linear-gradient(135deg, #987db8, #987db8);
     }
 
-    /* Keep your existing styles for forms and order items */
-    /* ...existing admin-specific styles... */
     h1 {
       text-align: center;
       font-size: 2.5rem;
@@ -484,10 +480,12 @@
     </div>
   </div>
   <script>
+
+    //mit API verbinden
 const BASE_URL = 'https://pb20.toiwxr.easypanel.host/api';
 let adminToken = null;
 
-// Admin Login
+// Werte vo de eingabefeldern lesen
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const user = document.getElementById('adminUser').value.trim();
@@ -497,49 +495,51 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   msg.className = '';
 
   try {
-    // Check admin credentials directly against admin collection
+    // Luegt i de collection nach em Admin User
     const checkRes = await fetch(`${BASE_URL}/collections/admin/records?filter=(adminUser="${encodeURIComponent(user)}")`);
     const data = await checkRes.json();
 
+// Prüft ob e gültigi Antwort zrugg chunt
     if (!data || !data.items || !Array.isArray(data.items)) {
       throw new Error('Fehler beim Abrufen der Admin-Daten');
     }
-
+// Prüeft ob en Admin mit dem  Namen existiert, wenn nöd denn das
     if (!data.items.length) {
       throw new Error('Admin nicht gefunden');
     }
-
+// verglicht passwort
     const admin = data.items[0];
     if (admin.adminPass !== pass) {
       throw new Error('Ungültiges Passwort');
     }
 
-    // Store admin info instead of token
-    adminToken = admin.id; // We'll use admin ID for authorization
+    adminToken = admin.id; // Mir benutzed admin ID zum authorization
 
     msg.textContent = 'Login erfolgreich!';
     msg.className = 'success-message';
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('adminContent').style.display = 'block';
     
-    // Load orders automatically after login
+    // Bestellungen laden nach log in
     loadOrders();
+
+    //fehlermeldung falls laden nicht funktioniert
   } catch (err) {
     msg.textContent = err.message;
     msg.className = 'error-message';
   }
 });
 
-// Load orders function
+// Lade vo de bstellige de button
 async function loadOrders() {
   const ordersList = document.getElementById('ordersList');
   ordersList.innerHTML = 'Lade Bestellungen...';
 
   try {
-    // Get products without length checks
+    // Produkte abrufen und in ein Map-Objekt speichern die ID ist Produktname
     let productsMap = {};
     try {
-      const productsRes = await fetch(`${BASE_URL}/collections/products/records?perPage=100`);
+      const productsRes = await fetch(`${BASE_URL}/collections/products/records?perPage=100`); //nimmt die produckte von API products collection
       const productsData = await productsRes.json();
       if (productsData?.items) {
         productsData.items.forEach(p => {
@@ -550,17 +550,18 @@ async function loadOrders() {
       console.log('Produkte laden fehlgeschlagen:', e);
     }
 
-    // Get orders without length checks
+    // bstellige abrüefe
     const ordersRes = await fetch(`${BASE_URL}/collections/orders/records?sort=-created`);
     const data = await ordersRes.json();
     
     ordersList.innerHTML = '';
 
-    // Just try to iterate, if it fails, show empty message
+    // bstellige ahzeige
     try {
       data?.items?.forEach(order => {
         const orderDiv = document.createElement('div');
         orderDiv.className = 'order-item';
+        //in HTML machen
         orderDiv.innerHTML = `
           <div class="order-header">
             <strong>${order?.customerName || 'Unbekannt'}</strong>
@@ -578,7 +579,7 @@ async function loadOrders() {
           <button class="delete-btn" data-id="${order?.id || ''}">Löschen</button>
         `;
 
-        // Add delete event listener
+        // Löschen Button Event Listener (heisst wenn wenn man drauf klickt wir aktion durchgeführt)
         orderDiv.querySelector('.delete-btn').addEventListener('click', async function() {
           if (!confirm('Möchten Sie diese Bestellung wirklich löschen?')) return;
 
@@ -591,17 +592,18 @@ async function loadOrders() {
               throw new Error('Löschen fehlgeschlagen');
             }
 
-            // Remove the order from UI
+            // Löschen der Bestellung aus der Anzeige
             orderDiv.remove();
 
-            // Show success message
+            // Bestätigungs nachricht anzeigen
             const successMsg = document.createElement('div');
             successMsg.className = 'success-message';
             successMsg.textContent = 'Bestellung erfolgreich gelöscht';
             ordersList.insertBefore(successMsg, ordersList.firstChild);
             
-            // Remove success message after 3 seconds
+            // benachrichtigung weg machen nach 3 sekunden
             setTimeout(() => successMsg.remove(), 3000);
+
           } catch (err) {
             console.error('Delete error:', err);
             const errorMsg = document.createElement('div');
@@ -609,20 +611,21 @@ async function loadOrders() {
             errorMsg.textContent = `Fehler beim Löschen: ${err.message}`;
             orderDiv.appendChild(errorMsg);
             
-            // Remove error message after 3 seconds
             setTimeout(() => errorMsg.remove(), 3000);
           }
         });
 
-        // Add the patch event listener right after creating orderDiv
+        // Speicher-Button der Mengenanpassung
         orderDiv.querySelector('.save-btn').addEventListener('click', async function() {
           const newQuantity = parseInt(orderDiv.querySelector('.quantity-input').value);
+          //prüefen ob zahl gültig isch wenn nicht dann
           if (isNaN(newQuantity) || newQuantity < 1) {
             alert('Bitte geben Sie eine gültige Menge ein');
             return;
           }
 
           try {
+            //Patch anfragen zum Aktualisieren der Menge
             const patchRes = await fetch(`${BASE_URL}/collections/orders/records/${order.id}`, {
               method: 'PATCH',
               headers: {
@@ -637,13 +640,13 @@ async function loadOrders() {
               throw new Error('Aktualisierung fehlgeschlagen');
             }
 
-            // Show success message
+            // Erfolgsmeldig ahzeige
             const successMsg = document.createElement('div');
             successMsg.className = 'success-message';
             successMsg.textContent = 'Menge erfolgreich aktualisiert';
             orderDiv.appendChild(successMsg);
             
-            // Remove success message after 3 seconds
+            // Erfolgsmeldung entfernen nach 3 sekunde
             setTimeout(() => successMsg.remove(), 3000);
 
           } catch (err) {
@@ -653,37 +656,42 @@ async function loadOrders() {
             errorMsg.textContent = `Fehler beim Aktualisieren: ${err.message}`;
             orderDiv.appendChild(errorMsg);
             
-            // Remove error message after 3 seconds
             setTimeout(() => errorMsg.remove(), 3000);
           }
         });
 
+        //Bestellung in die Liste einfügen
         ordersList.appendChild(orderDiv);
       });
     } catch (e) {
+        //falls keine bestellung vorhanden sind
       ordersList.innerHTML = '<div class="info-message">Keine Bestellungen verfügbar.</div>';
     }
 
   } catch (err) {
+    //Fehler beim Laden der bestellungen
     ordersList.innerHTML = '<div class="error-message">Fehler beim Laden</div>';
   }
 }
 
-// Attach load handler
+// Laden der Bestellung per Button
 document.getElementById('loadOrdersBtn').addEventListener('click', loadOrders);
 
-// Add logout functionality
+// Log out funktion
 const logoutBtn = document.createElement('button');
 logoutBtn.textContent = 'Logout';
 logoutBtn.className = 'logout-btn';
 logoutBtn.onclick = () => {
+    //Formularansicht wieder anzeigen
   adminToken = null;
   document.getElementById('loginForm').style.display = 'block';
   document.getElementById('adminContent').style.display = 'none';
   document.getElementById('loginForm').reset();
 };
+// Logout Button in den Admin Content einfügen
 document.getElementById('adminContent').prepend(logoutBtn);
 </script>
+
 <footer>
     <div class="footer-content">
       <div class="footer-logo">
